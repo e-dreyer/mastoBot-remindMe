@@ -1,12 +1,14 @@
 
 👋 Hey there, @{{ account }} ! 🤗 Thanks for the follow! 🚀✨
 
-Welcome aboard the time-traveling adventure with Time Traveler Bot! 🕰️⏳ Get ready to rediscover your favorite Mastodon moments in style. 🌟
+Welcome aboard the time-traveling adventure with RemindMe Bot! 🕰️⏳ Get ready to rediscover your favorite Mastodon moments in style. 🌟
 
 🔮 How to Summon Me:
 
-1. Just give me a mention in your post, like this: @remindMe 2 weeks 3 days 5 hours ⏰
-2. Replace the time values with your desired time frame. You can mix and match years, months, weeks, days, hours, and even minutes! ⚙️
-3. I'll do my magic and send you a nudge when the time is right, transporting you back to that precious post! 🪄✉️
+1️⃣ Just give me a mention in your post, like this: @remindMe 2 weeks 3 days 5 hours ⏰
+
+2️⃣ Replace the time values with your desired time frame. You can mix and match years, months, weeks, days, hours, and even minutes! ⚙️
+
+3️⃣ I'll do my magic and send you a nudge when the time is right, transporting you back to that precious post! 🪄✉️
 
 Feel free to reach out if you need any assistance or have questions, @Stark9837@techhub.social is my creator and admin. Happy time traveling! 🚀🕒🤖
