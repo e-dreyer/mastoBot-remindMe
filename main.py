@@ -20,7 +20,6 @@ class MyBot(MastoBot):
         pattern = r'(?i)<span class="h-card"><a href="https://techhub\.social/@remindMe" class="u-url mention">@<span>remindMe</span></a></span>\s*(?:(?:(\d+)\s*years?)?\s*)?(?:(\d+)\s*months?)?\s*(?:(\d+)\s*weeks?)?\s*(?:(\d+)\s*days?)?\s*(?:(\d+)\s*hours?)?\s*(?:(\d+)\s*minutes?)?'
 
         matches = re.search(pattern, content)
-        print(content)
         if matches:
             years, months, weeks, days, hours, minutes = map(lambda x: int(x) if x else 0, matches.groups())
             logging.info(f"Years: {years}, Months: {months}, Weeks: {weeks}, Days: {days}, Hours: {hours}, Minutes: {minutes}")
