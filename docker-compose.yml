@@ -1,0 +1,31 @@
+version: "3.3"
+
+services:
+  mastobot-remindme-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    command: ["python3", "main.py"]
+    networks:
+      - mastobot-remindme-network
+    depends_on:
+      - mastobot-remindme-redis
+
+  mastobot-remindme-redis:
+    image: "redis/redis-stack"
+    volumes:
+      - mastobot-remindme-redis-data:/data
+    networks:
+      - mastobot-remindme-network
+    ports:
+      - "${REDIS_PORT}:6379"
+      - "${REDIS_INSIGHT_PORT}:8001"
+
+volumes:
+  mastobot-remindme-redis-data:
+    driver: local
+
+networks:
+  mastobot-remindme-network:
