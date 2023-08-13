@@ -1,24 +1,29 @@
 import re
+import datetime
 
-pattern = r'(?i)@remindMe\s*(?:(?:(\d+)\s*years?)?\s*)?(?:(\d+)\s*months?)?\s*(?:(\d+)\s*weeks?)?\s*(?:(\d+)\s*days?)?\s*(?:(\d+)\s*hours?)?\s*(?:(\d+)\s*minutes?)?'
+pattern = r'(?i)<span class="h-card"><a href="https://techhub\.social/@remindMe" class="u-url mention">@<span>remindMe</span></a></span>\s*(?:(?:(\d+)\s*years?)?\s*)?(?:(\d+)\s*months?)?\s*(?:(\d+)\s*weeks?)?\s*(?:(\d+)\s*days?)?\s*(?:(\d+)\s*hours?)?\s*(?:(\d+)\s*minutes?)?'
 
-tests: list[str] = list([
-    "@remindMe 3 years 2 months 1 weeks 1 day",
-    "@remindMe 6 months 2 days",
-    "@remindMe 7 months 1 day",
-    "@remindMe 2 weeks",
-    "@remindMe 1 day",
-    "@remindMe 2 days",    
-    "@remindMe 1 hour",
-    "@remindMe 2 weeks 3 hours"
-])
+tests = [
+    '<p><span class="h-card"><a href="https://techhub.social/@remindMe" class="u-url mention">@<span>remindMe</span></a></span> 2 weeks 3 days 10 minutes</p>'
+]
 
 for test in tests:
     print(f"test: {test}")
     matches = re.search(pattern, test)
+    time_now = datetime.datetime.now()
 
     if matches:
-        years, months, weeks, days, hours, minutes = matches.groups()
+        years, months, weeks, days, hours, minutes = map(lambda x: int(x or 0), matches.groups())
         print(f"Years: {years}, Months: {months}, Weeks: {weeks}, Days: {days}, Hours: {hours}, Minutes: {minutes}")
+        
+        delta = datetime.timedelta(
+            days=days + weeks * 7 + months * 30 + years * 365,
+            hours=hours,
+            minutes=minutes
+        )
+        
+        future_time = time_now + delta
+        print(f"Current Time: {time_now}")
+        print(f"Future Time: {future_time}")
     else:
         print("No match found.")
