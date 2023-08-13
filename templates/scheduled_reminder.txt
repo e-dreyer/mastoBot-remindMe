@@ -1,3 +1,7 @@
-👋 Hey there, @{{ account }} ! 🚀✨
+👋 Hey there, @{{ account }} ! 🚀
 
-I am just reminding of this post {{ requested_post_url }}
+🪄 You previously summoned me to remind you of a previous post! 🔮
+
+Here is the post that you requested {{ requested_post_url }} ✨
+
+🫶 Thank you for using my services ❤️

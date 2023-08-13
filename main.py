@@ -12,18 +12,27 @@ from mastoBot.mastoBot import MastoBot, handleMastodonExceptions
 class MyBot(MastoBot):
     @handleMastodonExceptions
     def processMention(self, mention: Dict):
+        # Get the mention data
         api_status = self.getStatus(mention.get("status"))
-        api_account = self.getAccount(mention.get("account"))
         content = api_status.get("content")
         mention_created_at = api_status.get("created_at")
         
+        # Get the account data
+        api_account = self.getAccount(mention.get("account"))
+        
+        # Pattern for extracting time parameters
         pattern = r'(?i)<span class="h-card"><a href="https://techhub\.social/@remindMe" class="u-url mention">@<span>remindMe</span></a></span>\s*(?:(?:(\d+)\s*years?)?\s*)?(?:(\d+)\s*months?)?\s*(?:(\d+)\s*weeks?)?\s*(?:(\d+)\s*days?)?\s*(?:(\d+)\s*hours?)?\s*(?:(\d+)\s*minutes?)?'
 
+        # Search for matches
         matches = re.search(pattern, content)
+        
+        # If matches are found
         if matches:
+            # Extract data
             years, months, weeks, days, hours, minutes = map(lambda x: int(x) if x else 0, matches.groups())
             logging.info(f"Years: {years}, Months: {months}, Weeks: {weeks}, Days: {days}, Hours: {hours}, Minutes: {minutes}")
             
+            # Calculate delta time
             delta = datetime.timedelta(
                 days=days + weeks * 7 + months * 30 + years * 365,
                 hours=hours,
@@ -34,6 +43,7 @@ class MyBot(MastoBot):
             logging.info(f"Current Time: {mention_created_at}")
             logging.info(f"Future Time: {future_time}")
             
+            # Create scheduled message
             scheduled_reminder_message = bot.getTemplate(
                 file_name='scheduled_reminder.txt',
                 data={
@@ -41,16 +51,36 @@ class MyBot(MastoBot):
                     'requested_post_url': api_status.get('url')
                 })
             
+            # Create reply message
+            reply_message = bot.getTemplate(
+                file_name='reply_to_request.txt',
+                data={
+                    'account': api_account.get('acct')
+                }
+            )
+            
             try:
+                # Post scheduled post
                 scheduled_post = bot._api.status_post(
                     status=scheduled_reminder_message, 
                     scheduled_at=future_time,
                     visibility='direct'
                     )
                 
+                # Post reply and acknowledging message
+                reply_post = bot._api.status_post(
+                    status=reply_message,
+                    in_reply_to_id=api_status.get('id'),
+                    visibility='direct'
+                )
+                
                 logging.info(f'new scheduled post: {scheduled_post}')
+                logging.info(f'new reply post: {reply_post}')
+                
+                # Favourite their request message
                 bot.favoriteStatus(api_status.get('id'))
         
+                # Dismiss the notification
                 logging.info(f"📬 \t Mention processed: {mention.get('id')}")
                 self.dismissNotification(mention.get("id"))
             except:
