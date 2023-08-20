@@ -21,7 +21,7 @@ class MyBot(MastoBot):
         api_account = self.getAccount(mention.get("account"))
         
         # Pattern for extracting time parameters
-        pattern = r'(?i)<span class="h-card"><a href="https://techhub\.social/@remindMe" class="u-url mention">@<span>remindMe</span></a></span>\s*(?:(?:(\d+)\s*years?)?\s*)?(?:(\d+)\s*months?)?\s*(?:(\d+)\s*weeks?)?\s*(?:(\d+)\s*days?)?\s*(?:(\d+)\s*hours?)?\s*(?:(\d+)\s*minutes?)?'
+        pattern = r'(?i)<span\s+class="h-card">\s*<a\s+href="https://techhub\.social/@remindMe"\s+class="u-url mention"[^>]*>@<span>remindMe</span></a>\s*</span>\s*(?:(?:(\d+)\s*years?)?\s*)?(?:(\d+)\s*months?)?\s*(?:(\d+)\s*weeks?)?\s*(?:(\d+)\s*days?)?\s*(?:(\d+)\s*hours?)?\s*(?:(\d+)\s*minutes?)?'
 
         # Search for matches
         matches = re.search(pattern, content)
@@ -39,7 +39,12 @@ class MyBot(MastoBot):
                 minutes=minutes
             )
             
+            if (years + months + weeks + days + hours + minutes <= 0):
+                logging.warning('Mention does not include non-zero time')
+                return
+            
             future_time = mention_created_at + delta
+            
             logging.info(f"Current Time: {mention_created_at}")
             logging.info(f"Future Time: {future_time}")
             
